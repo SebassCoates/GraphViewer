@@ -29,27 +29,35 @@ from filetemplates import *
 
 def invalid_args():
         print("Invalid arguments given")
-        print("Expecting 1 file with whitespace delimited adjacency matrix data")
+        print("Expecting 2 files")
+        print("File 1: whitespace delimited adjacency matrix data")
+        print("File 2: whitespace delimited node labels")
 
-def generate_HTML(adjMatrix):
+def generate_HTML(adjMatrix, labels):
         adjMatrix.print()
 
-def generate_CSS(adjMatrix):
+def generate_CSS(adjMatrix, lables):
         print(adjMatrix.get_dimen())
 
-def generate_JS(adjMatrix):
+def generate_JS(adjMatrix, labels):
         pass
 
 print("parsing command line arguments")
 args = sys.argv
-if len(args) != 2:
+if len(args) != 3:
         invalid_args()
         quit()
 
 try:
         inputdata = open(args[1], "r").read()
 except IOError:
-        print('"' + args[1] + '"' + " is invalid file")
+        print('"' + args[1] + '"' + " is invalid file (expecting adj matrix)")
+        quit()
+
+try:
+        labeldata = open(args[2], "r").read()
+except IOError:
+        print('"' + args[2] + '"' + " is invalid file (expecting label info)")
         quit()
 
 #files for viewing graph in browser
@@ -64,6 +72,8 @@ try:
 except ValueError:
         print("Invalid graph data: dimensions non-square")
 
-htmlString = generate_HTML(adjMatrix)
-cssString  = generate_CSS(adjMatrix)
-jsString   = generate_JS(adjMatrix)
+labels = labeldata.split()
+
+htmlString = generate_HTML(adjMatrix, labels)
+cssString  = generate_CSS(adjMatrix, labels)
+jsString   = generate_JS(adjMatrix, labels)
