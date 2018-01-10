@@ -35,11 +35,13 @@ def invalid_args():
 
 def generate_HTML(adjMatrix, labels):
         generated = htmlopen
+        for label in labels:
+                generated += node_HTML(label) 
 
         return generated + htmlclose
 
 def generate_CSS(adjMatrix, lables):
-        generated = ""
+        generated = nodecss
 
         return generated
 
@@ -48,7 +50,6 @@ def generate_JS(adjMatrix, labels):
 
         return generated
 
-print("parsing command line arguments")
 args = sys.argv
 if len(args) != 3:
         invalid_args()

@@ -4,7 +4,7 @@
 #  created by Sebastian Coates                                                 #
 #                                                                              #
 #  filetemplates.py                                                            #           
-#  Contains useful string consts for html/css/js file writing                  #
+#  Contains useful string consts/classes for html/css/js file writing          #
 #                                                                              #
 #  Copyright 2017 Sebastian Coates                                             #
 #                                                                              #
@@ -36,11 +36,17 @@ htmlopen = """<!doctype html>\
 
 htmlclose = """</body> 
 </html>"""
+
+def node_HTML(label):
+        return '<p class="node" id="' + label + '">' + label + '</p>'
 ################################################################################
 
 
 #############################CSS Code Templates#################################
+nodecss = """.node {
+        border: solid;
 
+}"""
 
 ################################################################################
 
