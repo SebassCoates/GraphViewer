@@ -34,13 +34,19 @@ def invalid_args():
         print("File 2: whitespace delimited node labels")
 
 def generate_HTML(adjMatrix, labels):
-        adjMatrix.print()
+        generated = htmlopen
+
+        return generated + htmlclose
 
 def generate_CSS(adjMatrix, lables):
-        print(adjMatrix.get_dimen())
+        generated = ""
+
+        return generated
 
 def generate_JS(adjMatrix, labels):
-        pass
+        generated = ""
+
+        return generated
 
 print("parsing command line arguments")
 args = sys.argv
@@ -77,3 +83,7 @@ labels = labeldata.split()
 htmlString = generate_HTML(adjMatrix, labels)
 cssString  = generate_CSS(adjMatrix, labels)
 jsString   = generate_JS(adjMatrix, labels)
+
+html.write(htmlString)
+css.write(cssString)
+js.write(jsString)
