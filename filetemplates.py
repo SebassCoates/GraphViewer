@@ -38,14 +38,18 @@ htmlclose = """</body>
 </html>"""
 
 def node_HTML(label):
-        return '<p class="node" id="' + label + '">' + label + '</p>'
+        return '<div class="node" id="' + label + '">' + label + '</div>\n'
 ################################################################################
 
 
 #############################CSS Code Templates#################################
 nodecss = """.node {
-        border: solid;
-
+        border-style: solid;
+        border-style: circle;
+        border-color: black;
+        border-radius: 100%;
+        size: 10%;
+        text-align: center;
 }"""
 
 ################################################################################

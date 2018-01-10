@@ -36,6 +36,7 @@ def invalid_args():
 def generate_HTML(adjMatrix, labels):
         generated = htmlopen
         for label in labels:
+                generated += '\t'
                 generated += node_HTML(label) 
 
         return generated + htmlclose
@@ -78,8 +79,13 @@ try:
         adjMatrix = Matrix(rawdata)
 except ValueError:
         print("Invalid graph data: dimensions non-square")
+        quit()
 
 labels = labeldata.split()
+
+if len(labels) != adjMatrix.get_dimen():
+        print("Error: number of labels does not match dimensions of adj matrix")
+        quit()
 
 htmlString = generate_HTML(adjMatrix, labels)
 cssString  = generate_CSS(adjMatrix, labels)
