@@ -1,0 +1,12 @@
+.node {
+        font-size: 45px;
+        border-style: solid;
+        border-color: black;
+        text-align: center;
+        vertical-align: middle;
+        width: 100px;
+        height: 100px;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+}

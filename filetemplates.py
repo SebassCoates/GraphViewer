@@ -45,11 +45,14 @@ def node_HTML(label):
 #############################CSS Code Templates#################################
 nodecss = """.node {
         border-style: solid;
-        border-style: circle;
         border-color: black;
-        border-radius: 100%;
-        size: 10%;
         text-align: center;
+        vertical-align: middle;
+        width: 100px;
+        height: 100px;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
 }"""
 
 ################################################################################
