@@ -48,12 +48,13 @@ def generate_JS(adjMatrix, labels):
 
         for label in labels:
                 index = labels.index(label)
-                x = 50 + 100 * index
-                y = 50 #+ 100 * index
+                x = 50 + 200 * index
+                y = 50 + 100 * index
                 r = 40
-                generated += node_JS(x, y, r, label) 
+                nodes[label] = Node(x, y, r, label)
+                generated += node_JS(nodes[label]) 
 
-        generated += vertex_JS(labels[0], labels[1], "1", "0")
+        generated += vertex_JS(nodes[labels[0]], nodes[labels[1]], "1", "0")
 
         return generated + jsclose
 

@@ -95,6 +95,28 @@ jsopen = "function load() {\n"
 
 jsclose = "}"
 
+nodes = {} #to maintain set of node objects
+
+class Node:
+        def __init__(self, x, y, r, label):
+                self.x = x
+                self.y = y
+                self.r = r
+                self.label = label
+
+        def x():
+                return self.x
+
+        def y():
+                return self.y
+
+        def r():
+                return self.r
+
+        def label():
+                return self.label
+
+
 def circle_JS(x, y, r, label):
         circlestring  = "<g>"
         circlestring += "<circle cx='" + str(x) + "' cy='" + str(y) + "' r='" + str(r) + "' id='" + label + "'/>"
@@ -107,27 +129,28 @@ def line_JS(x1, y1, x2, y2, label):
         linestring  = "<g>" 
         linestring += "<line x1='" + str(x1) + "' y1='" + str(y1) + "' x2='" + str(x2) + "' y2='" + str(y2) + "'/>"
         linestring += "</g>"
-        linestring += "<text x='" + str(x2 / 2) + \
+        linestring += "<text x='" + str(x1 + abs(x2 - x1) / 2) + \
                          "' y='" + str(y1 + abs(y2-y1)/2 - 3) + "'>" + label + "</text>"
         
         return "line = " + '"' + linestring + '"' + ';\n'
 
-def node_JS(x, y, r, label):
-        nodejs = ""
-        nodejs += circle_JS(x, y, r, label)
+def node_JS(node):
+        nodejs = circle_JS(node.x, node.y, node.r, node.label)
         nodejs += "document.getElementById('pane').innerHTML += circle;\n"
         return nodejs
 
-def vertex_JS(node1ID, node2ID, weight, direction):
-        vertexjs  = ""
-        vertexjs += "element1 = document.getElementById('" + node1ID + "');\n"
-        vertexjs += "element2 = document.getElementById('" + node2ID + "');\n"
-        vertexjs += "console.log(element1);\n"
-        vertexjs += "rect1 = element1.getBoundingClientRect();\n"
-        vertexjs += "rect2 = element2.getBoundingClientRect();\n"
-        vertexjs += "console.log(rect2);\n"
-        vertexjs += "console.log(document.body.textContent);\n"
-        vertexjs += line_JS(0, 50, 200, 200, weight)
+def vertex_JS(node1, node2, weight, direction):
+        if node1.x < node2.x:
+                x1 = node1.x + node1.r
+                x2 = node2.x - node2.r
+        else: 
+                x1 = node1.x - node1.r
+                x2 = node2.x + node2.r
+
+        y1 = node1.y
+        y2 = node2.y
+
+        vertexjs = line_JS(x1, y1, x2, y2, weight)
         vertexjs += "document.getElementById('pane').innerHTML += line;\n"
 
         return vertexjs
