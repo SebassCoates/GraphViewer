@@ -105,10 +105,10 @@ def circle_JS(x, y, r, label):
 
 def line_JS(x1, y1, x2, y2, label):
         linestring  = "<g>" 
-        linestring += "<line x1='0' y1='0' x2='200' y2='200'/>"
+        linestring += "<line x1='" + str(x1) + "' y1='" + str(y1) + "' x2='" + str(x2) + "' y2='" + str(y2) + "'/>"
         linestring += "</g>"
         linestring += "<text x='" + str(x2 / 2) + \
-                         "' y='" + str(y2 / 2 - 5) + "'>" + label + "</text>"
+                         "' y='" + str(y1 + abs(y2-y1)/2 - 3) + "'>" + label + "</text>"
         
         return "line = " + '"' + linestring + '"' + ';\n'
 
@@ -127,7 +127,7 @@ def vertex_JS(node1ID, node2ID, weight, direction):
         vertexjs += "rect2 = element2.getBoundingClientRect();\n"
         vertexjs += "console.log(rect2);\n"
         vertexjs += "console.log(document.body.textContent);\n"
-        vertexjs += line_JS(0, 0, 200, 200, weight)
+        vertexjs += line_JS(0, 50, 200, 200, weight)
         vertexjs += "document.getElementById('pane').innerHTML += line;\n"
 
         return vertexjs
