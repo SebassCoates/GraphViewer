@@ -1,5 +1,4 @@
 .node {
-        font-size: 45px;
         border-style: solid;
         border-color: black;
         text-align: center;
@@ -9,4 +8,14 @@
         -moz-border-radius: 50%;
         -webkit-border-radius: 50%;
         border-radius: 50%;
+}
+
+circle {
+    stroke='black';
+    fill='white'    
+}
+
+line {
+        stroke: black;
+        stroke-width: 2;
 }

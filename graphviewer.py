@@ -34,22 +34,23 @@ def invalid_args():
         print("File 2: whitespace delimited node labels")
 
 def generate_HTML(adjMatrix, labels):
-        generated = htmlopen
-        for label in labels:
-                generated += '\t'
-                generated += node_HTML(label) 
-
-        return generated + htmlclose
+        generated = htmlopen + svgopen
+        return generated + svgclose +  htmlclose
 
 def generate_CSS(adjMatrix, lables):
-        generated = nodecss
+        generated = nodecss + "\n\n" + circlecss + "\n\n" + linecss
 
         return generated
 
 def generate_JS(adjMatrix, labels):
-        generated = ""
+        generated = jsopen
 
-        return generated
+        for label in labels:
+                generated += node_JS(label) 
+
+        generated += vertex_JS(labels[0], labels[1], "1", "0")
+
+        return generated + jsclose
 
 args = sys.argv
 if len(args) != 3:
