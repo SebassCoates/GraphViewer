@@ -37,7 +37,7 @@ htmlopen = """<!doctype html>\
 htmlclose = """</body> 
 </html>"""
 
-svgopen = "<svg height='210' width='500' id='pane'>"
+svgopen = "<svg height='100%' width='100%' id='pane'>"
 svgclose = "</svg>"
 
 def node_HTML(label):
@@ -46,6 +46,21 @@ def node_HTML(label):
 
 
 #############################CSS Code Templates#################################
+svgcss = """html, body { 
+        margin:0; 
+        padding:0; 
+        overflow:hidden 
+}
+
+svg { 
+        position:fixed;
+        top:0; 
+        bottom:0; 
+        left:0; 
+        right:0;
+        background-color: rgb(225,225,225);
+}"""
+
 nodecss = """.node {
         border-style: solid;
         border-color: black;
@@ -59,13 +74,18 @@ nodecss = """.node {
 }"""
 
 circlecss = """circle {
-    stroke='black';
-    fill='white'    
+        stroke: black;
+        fill: white;   
 }"""
 
 linecss = """line {
         stroke: black;
         stroke-width: 2;
+}"""
+
+textcss = """text {
+        dy: .3em;
+        text-anchor: middle;
 }"""
 ################################################################################
 
@@ -76,17 +96,25 @@ jsopen = "function load() {\n"
 jsclose = "}"
 
 def circle_JS(x, y, r, label):
-        circlestring =  "<circle cx='50' cy='50' r='40' id='" + label + "'/>"
+        circlestring  = "<g>"
+        circlestring += "<circle cx='" + str(x) + "' cy='" + str(y) + "' r='" + str(r) + "' id='" + label + "'/>"
+        circlestring += "<text x='" + str(x) + "' y='" + str(y) + "'>" + label + "</text>"
+        circlestring += "</g>"
         return "circle = " + '"' + circlestring + '"' + ';\n'
 
 
-def line_JS(x1, y1, x2, y2):
-        linestring = "<line x1='0' y1='0' x2='200' y2='200'/>"
+def line_JS(x1, y1, x2, y2, label):
+        linestring  = "<g>" 
+        linestring += "<line x1='0' y1='0' x2='200' y2='200'/>"
+        linestring += "</g>"
+        linestring += "<text x='" + str(x2 / 2) + \
+                         "' y='" + str(y2 / 2 - 5) + "'>" + label + "</text>"
+        
         return "line = " + '"' + linestring + '"' + ';\n'
 
-def node_JS(label):
+def node_JS(x, y, r, label):
         nodejs = ""
-        nodejs += circle_JS(50,50,50,label)
+        nodejs += circle_JS(x, y, r, label)
         nodejs += "document.getElementById('pane').innerHTML += circle;\n"
         return nodejs
 
@@ -99,7 +127,7 @@ def vertex_JS(node1ID, node2ID, weight, direction):
         vertexjs += "rect2 = element2.getBoundingClientRect();\n"
         vertexjs += "console.log(rect2);\n"
         vertexjs += "console.log(document.body.textContent);\n"
-        vertexjs += line_JS(0, 0, 200, 200)
+        vertexjs += line_JS(0, 0, 200, 200, weight)
         vertexjs += "document.getElementById('pane').innerHTML += line;\n"
 
         return vertexjs

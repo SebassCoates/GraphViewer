@@ -38,7 +38,8 @@ def generate_HTML(adjMatrix, labels):
         return generated + svgclose +  htmlclose
 
 def generate_CSS(adjMatrix, lables):
-        generated = nodecss + "\n\n" + circlecss + "\n\n" + linecss
+        generated  = svgcss + "\n\n" + nodecss + "\n\n" + circlecss + "\n\n" + linecss 
+        generated += "\n\n" + textcss
 
         return generated
 
@@ -46,7 +47,11 @@ def generate_JS(adjMatrix, labels):
         generated = jsopen
 
         for label in labels:
-                generated += node_JS(label) 
+                index = labels.index(label)
+                x = 50 + 100 * index
+                y = 50 #+ 100 * index
+                r = 40
+                generated += node_JS(x, y, r, label) 
 
         generated += vertex_JS(labels[0], labels[1], "1", "0")
 
