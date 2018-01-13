@@ -54,6 +54,18 @@ def generate_JS(adjMatrix, labels):
                 nodes[label] = Node(x, y, r, label)
                 generated += node_JS(nodes[label]) 
 
+        dimen = adjMatrix.dimen
+
+        generated += vertex_JS(nodes[labels[0]], nodes[labels[1]], "1", "0")
+
+        #for row in range(dimen):
+        #        for col in range(dimen):
+        #                generated += vertex_JS(nodes[labels[row]], 
+        #                                       nodes[labels[row]],
+        #                                       adjMatrix.at(row, col),
+        #                                       "0"
+        #                                       )
+
         generated += vertex_JS(nodes[labels[0]], nodes[labels[1]], "1", "0")
 
         return generated + jsclose
@@ -81,7 +93,6 @@ css  = open("index.css" , "w")
 js   = open("index.js"  , "w")
 
 rawdata   = inputdata.split()
-adjMatrix = ""
 try:
         adjMatrix = Matrix(rawdata)
 except ValueError:
@@ -89,8 +100,7 @@ except ValueError:
         quit()
 
 labels = labeldata.split()
-
-if len(labels) != adjMatrix.get_dimen():
+if len(labels) != adjMatrix.dimen:
         print("Error: number of labels does not match dimensions of adj matrix")
         quit()
 

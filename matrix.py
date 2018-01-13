@@ -43,8 +43,13 @@ class Matrix:
                                 col = 0
                                 row += 1
 
-        def get_dimen(self):
-                return self.dimen
+        def at(self, row, col):
+                if row >= self.dimen or row < 0:
+                        raise ValueError("row index out of bounds for Matrix")
+                elif col >= self.dimen or col < 0:
+                        raise ValueError("col index out of bounds for Matrix")
+
+                return self.matrix[row][col]
 
         def print(self):
                 for i in range(self.dimen):

@@ -120,7 +120,7 @@ class Node:
 def circle_JS(x, y, r, label):
         circlestring  = "<g>"
         circlestring += "<circle cx='" + str(x) + "%' cy='" + str(y) + "%' r='" + str(r) + "%' id='" + label + "'/>"
-        circlestring += "<text x='" + str(x) + "%' y='" + str(y) + "%' >" + label + "</text>"
+        circlestring += "<text x='" + str(x) + "%' y='" + str(y) + "%' font-size='" + str(r / 1.8) + "vw'>" + label + "</text>"
         circlestring += "</g>"
         return "circle = " + '"' + circlestring + '"' + ';\n'
 
@@ -130,7 +130,7 @@ def line_JS(x1, y1, x2, y2, label):
         linestring += "<line x1='" + str(x1) + "%' y1='" + str(y1) + "%' x2='" + str(x2) + "%' y2='" + str(y2) + "%'/>"
         linestring += "</g>"
         linestring += "<text x='" + str(x1 + abs(x2 - x1) / 2.0) + \
-                         "%' y='" + str(y1 + abs(y2 - y1) / 2.0 - .33) + "%'>" + label + "</text>"
+                         "%' y='" + str(y1 + abs(y2 - y1) / 2.0 - .33) + "%'  font-size='" + str(2) + "vw'>" + label + "</text>"
         
         return "line = " + '"' + linestring + '"' + ';\n'
 
