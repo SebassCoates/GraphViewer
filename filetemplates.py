@@ -111,6 +111,11 @@ jsclose = "}"
 
 nodes = {} #to maintain set of node objects
 
+class Position:
+        def __init__(self, x, y):
+                self.x = x
+                self.y = y
+
 class Node:
         def __init__(self, x, y, r, label):
                 self.x = x

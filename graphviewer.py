@@ -26,6 +26,7 @@ import webbrowser
 import os
 import sys
 import random as rand
+import numpy  as np
 from matrix import Matrix
 from filetemplates import *
 
@@ -34,6 +35,30 @@ def invalid_args():
         print("Expecting 2 files")
         print("File 1: whitespace delimited adjacency matrix data")
         print("File 2: whitespace delimited node labels")
+
+def calculate_sizes(adjMatrix, labels):
+        dimen = adjMatrix.dimen
+
+        connections = np.zeros((dimen), dtype='int32')
+        sizes = {}
+        total = 0
+ 
+        for row in range(dimen):
+                for col in range(dimen):
+                        weight = adjMatrix.at(row, col)
+                        connections[row] += weight 
+                        connections[col] += weight 
+                        total += weight
+
+        for i in range(len(labels)):
+                sizes[labels[i]] = 5 * connections[i] / total
+
+        return sizes
+
+
+def calculate_positions(adjMatrix, labels, sizes):
+        positions = {}
+
 
 def generate_HTML(adjMatrix, labels):
         generated = htmlopen + svgopen
@@ -48,11 +73,13 @@ def generate_CSS(adjMatrix, lables):
 def generate_JS(adjMatrix, labels):
         generated = jsopen
 
+        sizes = calculate_sizes(adjMatrix, labels)
+        positions = calculate_positions(adjMatrix, labels, sizes)
+
         for label in labels:
-                index = labels.index(label)
-                x = rand.randint(5,95)
-                y = rand.randint(5,95)
-                r = 5
+                x = rand.randint(5, 95)#positions[label].x
+                y = rand.randint(5, 95)#positions[label].y
+                r = sizes[label]
                 nodes[label] = Node(x, y, r, label)
                 generated += node_JS(nodes[label]) 
 
