@@ -48,9 +48,9 @@ def generate_JS(adjMatrix, labels):
 
         for label in labels:
                 index = labels.index(label)
-                x = 50 + 200 * index
-                y = 50 + 100 * index
-                r = 40
+                x = 10 + 50 * index
+                y = 10 # + 10 * index
+                r = 5
                 nodes[label] = Node(x, y, r, label)
                 generated += node_JS(nodes[label]) 
 

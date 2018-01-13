@@ -119,18 +119,18 @@ class Node:
 
 def circle_JS(x, y, r, label):
         circlestring  = "<g>"
-        circlestring += "<circle cx='" + str(x) + "' cy='" + str(y) + "' r='" + str(r) + "' id='" + label + "'/>"
-        circlestring += "<text x='" + str(x) + "' y='" + str(y) + "'>" + label + "</text>"
+        circlestring += "<circle cx='" + str(x) + "%' cy='" + str(y) + "%' r='" + str(r) + "%' id='" + label + "'/>"
+        circlestring += "<text x='" + str(x) + "%' y='" + str(y) + "%' >" + label + "</text>"
         circlestring += "</g>"
         return "circle = " + '"' + circlestring + '"' + ';\n'
 
 
 def line_JS(x1, y1, x2, y2, label):
         linestring  = "<g>" 
-        linestring += "<line x1='" + str(x1) + "' y1='" + str(y1) + "' x2='" + str(x2) + "' y2='" + str(y2) + "'/>"
+        linestring += "<line x1='" + str(x1) + "%' y1='" + str(y1) + "%' x2='" + str(x2) + "%' y2='" + str(y2) + "%'/>"
         linestring += "</g>"
-        linestring += "<text x='" + str(x1 + abs(x2 - x1) / 2) + \
-                         "' y='" + str(y1 + abs(y2-y1)/2 - 3) + "'>" + label + "</text>"
+        linestring += "<text x='" + str(x1 + abs(x2 - x1) / 2.0) + \
+                         "%' y='" + str(y1 + abs(y2 - y1) / 2.0 - .33) + "%'>" + label + "</text>"
         
         return "line = " + '"' + linestring + '"' + ';\n'
 
