@@ -22,7 +22,8 @@
 #  along with Graph Viewer.  If not, see <http://www.gnu.org/licenses/>.       #
 ################################################################################
 
-
+import webbrowser
+import os
 import sys
 import random as rand
 from matrix import Matrix
@@ -117,3 +118,6 @@ jsString   = generate_JS(adjMatrix, labels)
 html.write(htmlString)
 css.write(cssString)
 js.write(jsString)
+
+htmlpath = os.path.abspath('index.html')
+webbrowser.get(using='google-chrome').open(htmlpath)
