@@ -51,7 +51,7 @@ def calculate_sizes(adjMatrix, labels):
                         total += weight
 
         for i in range(len(labels)):
-                sizes[labels[i]] = 25 * connections[i] / total
+                sizes[labels[i]] = 20 * connections[i] / total
 
         return sizes
 
@@ -64,10 +64,37 @@ def calculate_positions(adjMatrix, labels, sizes):
         
         positions[sortedSizes[0][0]] = Position(50, 50)
         i = 1
+        bigsize = sortedSizes[0][1] * 4
+        shift = bigsize
+        rot = shift ** .5
         numlabels  = len(labels)
         while(i < numlabels):
-                positions[sortedSizes[i][0]] = Position(rand.randint(5, 95), \
-                                                        rand.randint(5, 95))
+                direction = i % 6
+                if direction == 1:
+                        positions[sortedSizes[i][0]] = Position(50 + rot, 
+                                                                50 - shift + rot)
+
+                elif direction == 2:
+                        positions[sortedSizes[i][0]] = Position(50 + shift + rot,
+                                                                50 + shift + rot)
+
+                elif direction == 3:
+                        positions[sortedSizes[i][0]] = Position(50 - shift + rot,
+                                                                50 + shift + rot)
+
+                elif direction == 4:
+                        positions[sortedSizes[i][0]] = Position(50 - shift + rot,
+                                                                50 - shift + rot)
+
+                elif direction == 5:
+                        positions[sortedSizes[i][0]] = Position(50 + shift + rot,
+                                                                50 - shift + rot)
+
+                elif direction == 0:
+                        positions[sortedSizes[i][0]] = Position(50 + rot,
+                                                                50 + shift + rot)
+                        shift += bigsize / (2 ** (i/12))
+                        rot = -rot
                 i += 1
 
         return positions
