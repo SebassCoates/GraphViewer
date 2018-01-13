@@ -157,43 +157,43 @@ def vertex_JS(node1, node2, weight, direction):
 
         # directionRatio = float(deltaY) / float(deltaX)
         angle = abs(atan2(deltaY, deltaX))
-        
-        if angle < .75 or angle > 2.5:
-                if deltaX < 0:
-                        x1 = node1.x + node1.r
-                        x2 = node2.x - node2.r    
-                else: 
-                        x1 = node1.x - node1.r
-                        x2 = node2.x + node2.r
 
-                y1 = node1.y
-                y2 = node2.y    
+        #if angle < .75 or angle > 2.5:
+        #        if deltaX < 0:
+        #                x1 = node1.x + node1.r
+        #                x2 = node2.x - node2.r    
+        #        else: 
+        #                x1 = node1.x - node1.r
+        #                x2 = node2.x + node2.r
 
-        elif angle >= .75 and angle < 1.25 or angle <= 2.5 and angle > 2:
-                if deltaX < 0:
-                        x1 = node1.x + node1.r * trig45
-                        x2 = node2.x - node2.r * trig45
-                else: 
-                        x1 = node1.x - node1.r * trig45
-                        x2 = node2.x + node2.r * trig45
+#                y1 = node1.y
+#                y2 = node2.y    
 
-                if deltaY < 0:
-                        y1 = node1.y + node1.r * trig45
-                        y2 = node2.y - node2.r * trig45
-                else: 
-                        y1 = node1.y - node1.r * trig45
-                        y2 = node2.y + node2.r * trig45
-
+#        elif angle >= .75 and angle < 1.25 or angle <= 2.5 and angle > 2:
+        if deltaX < 0:
+                x1 = node1.x + node1.r * trig45
+                x2 = node2.x - node2.r * trig45
         else: 
-                if deltaY < 0:
-                        y1 = node1.y + node1.r
-                        y2 = node2.y - node2.r
-                else: 
-                        y1 = node1.y - node1.r
-                        y2 = node2.y + node2.r
+                x1 = node1.x - node1.r * trig45
+                x2 = node2.x + node2.r * trig45
 
-                x1 = node1.x
-                x2 = node2.x
+        if deltaY < 0:
+                y1 = node1.y + node1.r * trig45
+                y2 = node2.y - node2.r * trig45
+        else: 
+                y1 = node1.y - node1.r * trig45
+                y2 = node2.y + node2.r * trig45
+
+##        else: 
+ ##               if deltaY < 0:
+#                       y1 = node1.y + node1.r
+#                       y2 = node2.y - node2.r
+#               else: 
+#                       y1 = node1.y - node1.r
+#                       y2 = node2.y + node2.r
+
+#               x1 = node1.x
+#               x2 = node2.x
 
         
 
