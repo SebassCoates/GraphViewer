@@ -51,6 +51,16 @@ class Matrix:
 
                 return self.matrix[row][col]
 
+        def set(self, row, col, value):
+                if row >= self.dimen or row < 0:
+                        raise ValueError("row index out of bounds for Matrix")
+                elif col >= self.dimen or col < 0:
+                        raise ValueError("col index out of bounds for Matrix")
+
+                self.matrix[row][col] = value
+
+
+
         def print(self):
                 for i in range(self.dimen):
                         for j in range(self.dimen):

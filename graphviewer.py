@@ -57,15 +57,19 @@ def generate_JS(adjMatrix, labels):
 
         dimen = adjMatrix.dimen
 
-        #generated += vertex_JS(nodes[labels[0]], nodes[labels[1]], "1", "0")
-
+        #Only supporting undirected graphs
         for row in range(dimen):
                 for col in range(dimen):
+                        if adjMatrix.at(col, row) != 0:
+                                if adjMatrix.at(col, row) != adjMatrix.at(row, col):
+                                        print("Warning: only undirected graphs supported currently")
+
                         generated += vertex_JS(nodes[labels[col]], 
                                                nodes[labels[row]],
                                                str(adjMatrix.at(row, col)),
                                                "0"
                                                )
+
 
         return generated + jsclose
 
