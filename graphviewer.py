@@ -64,6 +64,9 @@ def generate_JS(adjMatrix, labels):
                                 if adjMatrix.at(col, row) != adjMatrix.at(row, col):
                                         print("Warning: only undirected graphs supported currently")
 
+                        if col > row:
+                                continue
+
                         generated += vertex_JS(nodes[labels[col]], 
                                                nodes[labels[row]],
                                                str(adjMatrix.at(row, col)),

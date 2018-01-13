@@ -22,6 +22,10 @@
 #  along with Graph Viewer.  If not, see <http://www.gnu.org/licenses/>.       #
 ################################################################################
 
+from math import atan2
+
+trig45 = 2 ** .5 / 2.0
+
 #############################HTML Code Templates################################
 htmlopen = """<!doctype html>\
 <html>
@@ -58,6 +62,8 @@ svg {
         bottom:0; 
         left:0; 
         right:0;
+        margin:0px;
+        padding:0px;
         background-color: rgb(225,225,225);
 }"""
 
@@ -71,14 +77,20 @@ nodecss = """.node {
         -moz-border-radius: 50%;
         -webkit-border-radius: 50%;
         border-radius: 50%;
+        padding: 0px;
+        margin: 0px;
 }"""
 
 circlecss = """circle {
         stroke: black;
         fill: white;   
+        padding: 0px;
+        margin: 0px;
 }"""
 
 linecss = """line {
+        padding: 0px;
+        margin: 0px;
         stroke: black;
         stroke-width: 2;
 }"""
@@ -140,15 +152,51 @@ def vertex_JS(node1, node2, weight, direction):
                 print('warning: self-loops not yet supported')
                 return "" 
 
-        if node1.x < node2.x:
-                x1 = node1.x + node1.r
-                x2 = node2.x - node2.r
-        else: 
-                x1 = node1.x - node1.r
-                x2 = node2.x + node2.r
+        deltaX = node1.x - node2.x
+        deltaY = node1.y - node2.y
 
-        y1 = node1.y
-        y2 = node2.y
+       # directionRatio = float(deltaY) / float(deltaX)
+        angle = abs(atan2(deltaY, deltaX))
+        print(angle)
+
+        if angle < .75 or angle > 2.5:
+                if deltaX < 0:
+                        x1 = node1.x + node1.r
+                        x2 = node2.x - node2.r    
+                else: 
+                        x1 = node1.x - node1.r
+                        x2 = node2.x + node2.r
+
+                y1 = node1.y
+                y2 = node2.y    
+
+        elif angle >= .75 and angle < 1.25 or angle <= 2.5 and angle > 2:
+                if deltaX < 0:
+                        x1 = node1.x + node1.r * trig45
+                        x2 = node2.x - node2.r * trig45
+                else: 
+                        x1 = node1.x - node1.r * trig45
+                        x2 = node2.x + node2.r * trig45
+
+                if deltaY < 0:
+                        y1 = node1.y + node1.r * trig45
+                        y2 = node2.y - node2.r * trig45
+                else: 
+                        y1 = node1.y - node1.r * trig45
+                        y2 = node2.y + node2.r * trig45
+
+        else: 
+                if deltaY < 0:
+                        y1 = node1.y + node1.r
+                        y2 = node2.y - node2.r
+                else: 
+                        y1 = node1.y - node1.r
+                        y2 = node2.y + node2.r
+
+                x1 = node1.x
+                x2 = node2.x
+
+        
 
 
         vertexjs = line_JS(x1, y1, x2, y2, weight)
