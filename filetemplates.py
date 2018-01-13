@@ -22,7 +22,7 @@
 #  along with Graph Viewer.  If not, see <http://www.gnu.org/licenses/>.       #
 ################################################################################
 
-from math import atan2, sin, cos
+from math import atan2
 
 trig45 = 2 ** .5 / 2.0
 
@@ -152,29 +152,51 @@ def vertex_JS(node1, node2, weight, direction):
                 print('warning: self-loops not yet supported')
                 return "" 
 
-        deltaX = float(node1.x - node2.x)
-        deltaY = float(node1.y - node2.y)
+        deltaX = node1.x - node2.x
+        deltaY = node1.y - node2.y
 
-        #directionRatio = float(deltaY) / float(deltaX)
+        # directionRatio = float(deltaY) / float(deltaX)
         angle = abs(atan2(deltaY, deltaX))
-        hypontenuse = (deltaX ** 2 + deltaY ** 2) ** .5
+        
+        if angle < .75 or angle > 2.5:
+                if deltaX < 0:
+                        x1 = node1.x + node1.r
+                        x2 = node2.x - node2.r    
+                else: 
+                        x1 = node1.x - node1.r
+                        x2 = node2.x + node2.r
 
-        ratioX = cos(abs(deltaY / hypontenuse))
-        ratioY = sin(abs(deltaX / hypontenuse))
+                y1 = node1.y
+                y2 = node2.y    
 
-        if deltaX < 0:
-                x1 = node1.x + node1.r * ratioX
-                x2 = node2.x - node2.r * ratioX
+        elif angle >= .75 and angle < 1.25 or angle <= 2.5 and angle > 2:
+                if deltaX < 0:
+                        x1 = node1.x + node1.r * trig45
+                        x2 = node2.x - node2.r * trig45
+                else: 
+                        x1 = node1.x - node1.r * trig45
+                        x2 = node2.x + node2.r * trig45
+
+                if deltaY < 0:
+                        y1 = node1.y + node1.r * trig45
+                        y2 = node2.y - node2.r * trig45
+                else: 
+                        y1 = node1.y - node1.r * trig45
+                        y2 = node2.y + node2.r * trig45
+
         else: 
-                x1 = node1.x - node1.r * ratioX
-                x2 = node2.x + node2.r * ratioX
+                if deltaY < 0:
+                        y1 = node1.y + node1.r
+                        y2 = node2.y - node2.r
+                else: 
+                        y1 = node1.y - node1.r
+                        y2 = node2.y + node2.r
 
-        if deltaY < 0:
-                y1 = node1.y + node1.r * ratioY
-                y2 = node2.y - node2.r * ratioY
-        else: 
-                y1 = node1.y - node1.r * ratioY
-                y2 = node2.y + node2.r * ratioY 
+                x1 = node1.x
+                x2 = node2.x
+
+        
+
 
         vertexjs = line_JS(x1, y1, x2, y2, weight)
         vertexjs += "document.getElementById('pane').innerHTML += line;\n"

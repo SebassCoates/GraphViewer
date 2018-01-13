@@ -3,7 +3,7 @@
 #  a lightweight graph visualizer for adjacency matrix data                    #
 #  created by Sebastian Coates                                                 #
 #                                                                              #
-#  graphviewer.py                                                              #           
+#  graphviewer.py                                                              #
 #  Contains main script                                                        #
 #                                                                              #
 #  Copyright 2017 Sebastian Coates                                             #
@@ -65,7 +65,7 @@ def generate_JS(adjMatrix, labels):
                                 if adjMatrix.at(col, row) != adjMatrix.at(row, col):
                                         print("Warning: only undirected graphs supported currently")
 
-                        if col > row:
+                        if col > row: #draw vertex only once
                                 continue
 
                         generated += vertex_JS(nodes[labels[col]], 
