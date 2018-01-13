@@ -104,19 +104,6 @@ class Node:
                 self.r = r
                 self.label = label
 
-        def x():
-                return self.x
-
-        def y():
-                return self.y
-
-        def r():
-                return self.r
-
-        def label():
-                return self.label
-
-
 def circle_JS(x, y, r, label):
         circlestring  = "<g>"
         circlestring += "<circle cx='" + str(x) + "%' cy='" + str(y) + "%' r='" + str(r) + "%' id='" + label + "'/>"
@@ -129,6 +116,12 @@ def line_JS(x1, y1, x2, y2, label):
         linestring  = "<g>" 
         linestring += "<line x1='" + str(x1) + "%' y1='" + str(y1) + "%' x2='" + str(x2) + "%' y2='" + str(y2) + "%'/>"
         linestring += "</g>"
+
+        if (x2 < x1):
+                x1, x2 = x2, x1
+        if (y2 < y1):
+                y1, y2 = y2, y1
+
         linestring += "<text x='" + str(x1 + abs(x2 - x1) / 2.0) + \
                          "%' y='" + str(y1 + abs(y2 - y1) / 2.0 - .33) + "%'  font-size='" + str(2) + "vw'>" + label + "</text>"
         
@@ -156,6 +149,7 @@ def vertex_JS(node1, node2, weight, direction):
 
         y1 = node1.y
         y2 = node2.y
+
 
         vertexjs = line_JS(x1, y1, x2, y2, weight)
         vertexjs += "document.getElementById('pane').innerHTML += line;\n"

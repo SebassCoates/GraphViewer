@@ -24,6 +24,7 @@
 
 
 import sys
+import random as rand
 from matrix import Matrix
 from filetemplates import *
 
@@ -48,8 +49,8 @@ def generate_JS(adjMatrix, labels):
 
         for label in labels:
                 index = labels.index(label)
-                x = 10 + 50 * index
-                y = 10 # + 10 * index
+                x = rand.randint(5,95)
+                y = rand.randint(5,95)
                 r = 5
                 nodes[label] = Node(x, y, r, label)
                 generated += node_JS(nodes[label]) 
@@ -60,13 +61,11 @@ def generate_JS(adjMatrix, labels):
 
         for row in range(dimen):
                 for col in range(dimen):
-                        generated += vertex_JS(nodes[labels[row]], 
-                                               nodes[labels[col]],
+                        generated += vertex_JS(nodes[labels[col]], 
+                                               nodes[labels[row]],
                                                str(adjMatrix.at(row, col)),
                                                "0"
                                                )
-
-        generated += vertex_JS(nodes[labels[0]], nodes[labels[1]], "1", "0")
 
         return generated + jsclose
 
