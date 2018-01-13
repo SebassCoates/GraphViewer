@@ -51,14 +51,26 @@ def calculate_sizes(adjMatrix, labels):
                         total += weight
 
         for i in range(len(labels)):
-                sizes[labels[i]] = 5 * connections[i] / total
+                sizes[labels[i]] = 25 * connections[i] / total
 
         return sizes
 
+def recursive_position(direction):
+        pass
 
 def calculate_positions(adjMatrix, labels, sizes):
-        positions = {}
+        positions   = {} 
+        sortedSizes = sorted(sizes.items(), key=lambda x:x[1], reverse=True)
+        
+        positions[sortedSizes[0][0]] = Position(50, 50)
+        i = 1
+        numlabels  = len(labels)
+        while(i < numlabels):
+                positions[sortedSizes[i][0]] = Position(rand.randint(5, 95), \
+                                                        rand.randint(5, 95))
+                i += 1
 
+        return positions
 
 def generate_HTML(adjMatrix, labels):
         generated = htmlopen + svgopen
@@ -77,8 +89,8 @@ def generate_JS(adjMatrix, labels):
         positions = calculate_positions(adjMatrix, labels, sizes)
 
         for label in labels:
-                x = rand.randint(5, 95)#positions[label].x
-                y = rand.randint(5, 95)#positions[label].y
+                x = positions[label].x
+                y = positions[label].y
                 r = sizes[label]
                 nodes[label] = Node(x, y, r, label)
                 generated += node_JS(nodes[label]) 
