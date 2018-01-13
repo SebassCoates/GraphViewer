@@ -120,4 +120,4 @@ css.write(cssString)
 js.write(jsString)
 
 htmlpath = os.path.abspath('index.html')
-webbrowser.get(using='google-chrome').open(htmlpath)
+webbrowser.open('file://' +  htmlpath)
