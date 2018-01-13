@@ -140,6 +140,13 @@ def node_JS(node):
         return nodejs
 
 def vertex_JS(node1, node2, weight, direction):
+        if weight == "0":
+                return ""
+        
+        if node1 == node2:
+                print('warning: self-loops not yet supported')
+                return "" 
+
         if node1.x < node2.x:
                 x1 = node1.x + node1.r
                 x2 = node2.x - node2.r

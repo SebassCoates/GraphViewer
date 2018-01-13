@@ -56,15 +56,15 @@ def generate_JS(adjMatrix, labels):
 
         dimen = adjMatrix.dimen
 
-        generated += vertex_JS(nodes[labels[0]], nodes[labels[1]], "1", "0")
+        #generated += vertex_JS(nodes[labels[0]], nodes[labels[1]], "1", "0")
 
-        #for row in range(dimen):
-        #        for col in range(dimen):
-        #                generated += vertex_JS(nodes[labels[row]], 
-        #                                       nodes[labels[row]],
-        #                                       adjMatrix.at(row, col),
-        #                                       "0"
-        #                                       )
+        for row in range(dimen):
+                for col in range(dimen):
+                        generated += vertex_JS(nodes[labels[row]], 
+                                               nodes[labels[col]],
+                                               str(adjMatrix.at(row, col)),
+                                               "0"
+                                               )
 
         generated += vertex_JS(nodes[labels[0]], nodes[labels[1]], "1", "0")
 
