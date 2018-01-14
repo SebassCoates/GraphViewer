@@ -113,9 +113,9 @@ textcss = """text {
 
 
 #############################JS Code Templates##################################
-jsopen = "function load() {\n"
+jsopen = "function load() {\n elementhtml = " + '"'
 
-jsclose = "}"
+jsclose = '"' + "\ndocument.getElementById('pane').innerHTML += elementhtml;\n}"
 
 nodes = {} #to maintain set of node objects
 
@@ -136,7 +136,7 @@ def circle_JS(x, y, r, label):
         circlestring += "<circle cx='" + str(x) + "%' cy='" + str(y) + "%' r='" + str(r) + "%' id='" + label + "'/>"
         circlestring += "<text x='" + str(x) + "%' y='" + str(y) + "%' font-size='" + str(r / 1.8) + "vw' class='circletext'>" + label + "</text>"
         circlestring += "</g>"
-        return "circle = " + '"' + circlestring + '"' + ';\n'
+        return circlestring
 
 
 def line_JS(x1, y1, x2, y2, label):
@@ -152,11 +152,10 @@ def line_JS(x1, y1, x2, y2, label):
         linestring += "<text x='" + str(x1 + abs(x2 - x1) / 2.0) + \
                          "%' y='" + str(y1 + abs(y2 - y1) / 2.0) + "%'  font-size='" + str(2) + "vw' class='linetext'>" + label + "</text>"
         
-        return "line = " + '"' + linestring + '"' + ';\n'
+        return linestring
 
 def node_JS(node):
-        nodejs = circle_JS(node.x, node.y, node.r, node.label)
-        nodejs += "document.getElementById('pane').innerHTML += circle;\n"
+        nodejs = circle_JS(node.x, node.y, node.r, node.label)  
         return nodejs
 
 def vertex_JS(node1, node2, weight, direction):
@@ -188,7 +187,6 @@ def vertex_JS(node1, node2, weight, direction):
                 y2 = node2.y + node2.r * trig45
 
         vertexjs = line_JS(x1, y1, x2, y2, weight)
-        vertexjs += "document.getElementById('pane').innerHTML += line;\n"
 
         return vertexjs
 
