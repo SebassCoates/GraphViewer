@@ -51,7 +51,7 @@ def calculate_sizes(adjMatrix, labels):
                         total += weight
 
         for i in range(len(labels)):
-                sizes[labels[i]] = 20 * connections[i] / total
+                sizes[labels[i]] = 25 * connections[i] / total
 
         return sizes
 
@@ -101,16 +101,6 @@ def calculate_positions(adjMatrix, labels, sizes):
 
 def generate_HTML(adjMatrix, labels):
         generated = htmlopen + svgopen
-        return generated + svgclose +  htmlclose
-
-def generate_CSS(adjMatrix, lables):
-        generated  = svgcss + "\n\n" + nodecss + "\n\n" + circlecss + "\n\n" + linecss 
-        generated += "\n\n" + textcss
-
-        return generated
-
-def generate_JS(adjMatrix, labels):
-        generated = jsopen
 
         sizes = calculate_sizes(adjMatrix, labels)
         positions = calculate_positions(adjMatrix, labels, sizes)
@@ -140,7 +130,16 @@ def generate_JS(adjMatrix, labels):
                                                "0"
                                                )
 
+        return generated + svgclose +  htmlclose
 
+def generate_CSS(adjMatrix, lables):
+        generated  = svgcss + "\n\n" + nodecss + "\n\n" + circlecss + "\n\n" + linecss 
+        generated += "\n\n" + textcss
+
+        return generated
+
+def generate_JS(adjMatrix, labels):
+        generated = jsopen
         return generated + jsclose
 
 args = sys.argv

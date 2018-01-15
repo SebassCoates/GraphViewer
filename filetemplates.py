@@ -113,9 +113,9 @@ textcss = """text {
 
 
 #############################JS Code Templates##################################
-jsopen = "function load() {\n elementhtml = " + '"'
-
-jsclose = '"' + "\ndocument.getElementById('pane').innerHTML += elementhtml;\n}"
+jsopen = "function load() {\n"
+ 
+jsclose = "\n}"
 
 nodes = {} #to maintain set of node objects
 
