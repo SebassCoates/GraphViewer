@@ -25,6 +25,7 @@
 import webbrowser
 import os
 import sys
+from math import ceil, sqrt
 import random as rand
 import numpy  as np
 from matrix import Matrix
@@ -36,6 +37,7 @@ def invalid_args():
         print("File 1: whitespace delimited adjacency matrix data")
         print("File 2: whitespace delimited node labels")
 
+#currently unused - all nodes sized the same
 def calculate_sizes(adjMatrix, labels):
         dimen = adjMatrix.dimen
 
@@ -55,60 +57,39 @@ def calculate_sizes(adjMatrix, labels):
 
         return sizes
 
-def recursive_position(direction):
-        pass
-
-def calculate_positions(adjMatrix, labels, sizes):
+def calculate_positions(adjMatrix, labels):
         positions   = {} 
-        sortedSizes = sorted(sizes.items(), key=lambda x:x[1], reverse=True)
+        #sortedSizes = sorted(sizes.items(), key=lambda x:x[1], reverse=True)
         
-        positions[sortedSizes[0][0]] = Position(50, 50)
-        i = 1
-        bigsize = sortedSizes[0][1] * 4
-        shift = bigsize
-        rot = shift ** .5
-        numlabels  = len(labels)
-        while(i < numlabels):
-                direction = i % 6
-                if direction == 1:
-                        positions[sortedSizes[i][0]] = Position(50 + rot, 
-                                                                50 - shift + rot)
+        #positions[sortedSizes[0][0]] = Position(50, 50)
+        r = 0
+        c = 0
+        #bigsize = sortedSizes[0][1] * 4
+        #shift = bigsize
+        #rot = shift ** .5
+        nodesPerRow  = ceil(sqrt(len(labels)))
+        blockSize = 100 / nodesPerRow
+        offset = blockSize / 4#.25 * nodesPerRow * blockSize
+        while(r < nodesPerRow and r * nodesPerRow + c < len(labels)):
+                positions[labels[r * nodesPerRow + c]] =\
+                        Position(c * blockSize + offset, r * blockSize + offset)
+                c += 1
+                if c == nodesPerRow:
+                        c = 0
+                        r += 1
 
-                elif direction == 2:
-                        positions[sortedSizes[i][0]] = Position(50 + shift + rot,
-                                                                50 + shift + rot)
-
-                elif direction == 3:
-                        positions[sortedSizes[i][0]] = Position(50 - shift + rot,
-                                                                50 + shift + rot)
-
-                elif direction == 4:
-                        positions[sortedSizes[i][0]] = Position(50 - shift + rot,
-                                                                50 - shift + rot)
-
-                elif direction == 5:
-                        positions[sortedSizes[i][0]] = Position(50 + shift + rot,
-                                                                50 - shift + rot)
-
-                elif direction == 0:
-                        positions[sortedSizes[i][0]] = Position(50 + rot,
-                                                                50 + shift + rot)
-                        shift += bigsize / (2 ** (i/12))
-                        rot = -rot
-                i += 1
-
-        return positions
+        return (positions, blockSize / 4)
 
 def generate_HTML(adjMatrix, labels):
         generated = htmlopen + svgopen
 
-        sizes = calculate_sizes(adjMatrix, labels)
-        positions = calculate_positions(adjMatrix, labels, sizes)
+        #sizes = calculate_sizes(adjMatrix, labels)
+        (positions, size) = calculate_positions(adjMatrix, labels)
 
         for label in labels:
                 x = positions[label].x
                 y = positions[label].y
-                r = sizes[label]
+                r = size
                 nodes[label] = Node(x, y, r, label)
                 generated += node_JS(nodes[label]) 
 
