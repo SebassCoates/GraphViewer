@@ -1,6 +1,6 @@
 __pycache__
-*.html
-*.css
-*.js
-generatedgraph.txt
-generatedlabels.txt
+**.html
+**.css
+**.js
+**.txt
+!license.txt
