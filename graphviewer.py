@@ -24,7 +24,7 @@
 
 import webbrowser
 import os
-import sys
+from sys import argv
 from math import ceil, sqrt
 import random as rand
 import numpy  as np
@@ -59,20 +59,14 @@ def calculate_sizes(adjMatrix, labels):
 
 def calculate_positions(adjMatrix, labels):
         positions   = {} 
-        #sortedSizes = sorted(sizes.items(), key=lambda x:x[1], reverse=True)
-        
-        #positions[sortedSizes[0][0]] = Position(50, 50)
         r = 0
         c = 0
-        #bigsize = sortedSizes[0][1] * 4
-        #shift = bigsize
-        #rot = shift ** .5
         nodesPerRow  = ceil(sqrt(len(labels)))
         blockSize = 100 / nodesPerRow
-        offset = blockSize / 4#.25 * nodesPerRow * blockSize
+        sideOffset = blockSize / 2#.25 * nodesPerRow * blockSize
+        topOffset = blockSize / 2.714
         while(r < nodesPerRow and r * nodesPerRow + c < len(labels)):
-                positions[labels[r * nodesPerRow + c]] =\
-                        Position(c * blockSize + offset, r * blockSize + offset)
+                positions[labels[r * nodesPerRow + c]] = Position(c * blockSize + sideOffset, r * blockSize + topOffset)
                 c += 1
                 if c == nodesPerRow:
                         c = 0
@@ -98,18 +92,27 @@ def generate_HTML(adjMatrix, labels):
         #Only supporting undirected graphs
         for row in range(dimen):
                 for col in range(dimen):
-                        if adjMatrix.at(col, row) != 0:
-                                if adjMatrix.at(col, row) != adjMatrix.at(row, col):
-                                        print("Warning: only undirected graphs supported currently")
+                        #if adjMatrix.at(col, row) != 0:
+                        #        if adjMatrix.at(col, row) != adjMatrix.at(row, col):
+                        #                print("Warning: only undirected graphs supported currently")
 
-                        if col > row: #draw vertex only once
-                                continue
+                        bidirectional = adjMatrix.at(col, row) == adjMatrix.at(row,col)
 
-                        generated += vertex_JS(nodes[labels[col]], 
-                                               nodes[labels[row]],
-                                               str(adjMatrix.at(row, col)),
-                                               "0"
-                                               )
+                        if col > row and bidirectional: #draw vertex only once
+                               continue #don't draw same vertex twice
+
+                        if bidirectional:
+                            generated += vertex_JS(nodes[labels[col]], 
+                                                   nodes[labels[row]],
+                                                   str(adjMatrix.at(row, col)),
+                                                   0
+                                                   )
+                        else:
+                            generated += vertex_JS(nodes[labels[col]], 
+                                                   nodes[labels[row]],
+                                                   str(adjMatrix.at(row, col)),
+                                                   1
+                                                   )
 
         return generated + svgclose +  htmlclose
 
@@ -123,22 +126,26 @@ def generate_JS(adjMatrix, labels):
         generated = jsopen
         return generated + jsclose
 
-args = sys.argv
-if len(args) != 3:
+
+##################################### MAIN #####################################
+if len(argv) < 3:
         invalid_args()
         quit()
 
 try:
-        inputdata = open(args[1], "r").read()
+        inputdata = open(argv[1], "r").read()
 except IOError:
-        print('"' + args[1] + '"' + " is invalid file (expecting adj matrix)")
+        print('"' + argv[1] + '"' + " is invalid file (expecting adj matrix)")
         quit()
 
 try:
-        labeldata = open(args[2], "r").read()
+        labeldata = open(argv[2], "r").read()
 except IOError:
-        print('"' + args[2] + '"' + " is invalid file (expecting label info)")
+        print('"' + argv[2] + '"' + " is invalid file (expecting label info)")
         quit()
+
+for arg in argv: #additional command line options handled here
+    pass
 
 #files for viewing graph in browser
 html = open("index.html", "w")

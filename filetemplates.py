@@ -3,7 +3,7 @@
 #  a lightweight graph visualizer for adjacency matrix data                    #
 #  created by Sebastian Coates                                                 #
 #                                                                              #
-#  filetemplates.py                                                            #           
+#  filetemplates.py                                                            #
 #  Contains useful string consts/classes for html/css/js file writing          #
 #                                                                              #
 #  Copyright 2017 Sebastian Coates                                             #
@@ -41,8 +41,8 @@ htmlopen = """<!doctype html>\
 htmlclose = """</body> 
 </html>"""
 
-svgopen = "<svg height='100%' width='100%' id='pane'>"
-svgclose = "</svg>"
+svgopen = "<div id='svg-container' style='width:100%;height:100%;'><svg height='100%' width='100%' id='pane' viewBox='0 0 100 100' preserveAspectRatio='none'>" #
+svgclose = "</svg></div>"
 
 def node_HTML(label):
         return '<div class="node" id="' + label + '">' + label + '</div>\n'
@@ -86,20 +86,28 @@ circlecss = """circle {
         fill: black;   
         padding: 0px;
         margin: 0px;
-        stroke-width: 2px;
+        stroke-width: .2;
 }"""
 
 linecss = """line {
         padding: 0px;
         margin: 0px;
         stroke: black;
-        stroke-width: 3px;
-}"""
+        stroke-width: .3;
+}
+polygon {
+        padding: 0px;
+        margin: 0px;
+        stroke: red;
+        stroke-width: .3;
+}
+"""
 
 textcss = """text {
         dy: .3em;
         text-anchor: middle;
         fill: white;
+        font-size: .3;
 }
 
 .linetext {
@@ -133,15 +141,35 @@ class Node:
 
 def circle_JS(x, y, r, label):
         circlestring  = "<g>"
-        circlestring += "<circle cx='" + str(x) + "%' cy='" + str(y) + "%' r='" + str(r) + "%' id='" + label + "'/>"
-        circlestring += "<text x='" + str(x) + "%' y='" + str(y) + "%' font-size='" + str(r / 1.8) + "vw' class='circletext'>" + label + "</text>"
+        circlestring += "<circle cx='" + str(x) + "' cy='" + str(y) + "' r='" + str(r) + "' id='" + label + "'/>"
+        circlestring += "<text x='" + str(x) + "' y='" + str(y) + "' font-size='" + str(r / 18) + "vw' class='circletext'>" + label + "</text>"
         circlestring += "</g>"
         return circlestring
 
+#Coords of line
+def arrow_JS(x1, y1, x2, y2):
+        arrowSize = 2#((y2 - y1) ** 2 +  (x2 - x1) ** 2) ** .5
+        slope = (y2 - y1) / (x2 - x1)
+        tangent = -1 / slope
+
+        arrow = '<polygon points="'
+        arrow += str(x1) + ',' + str(y1) + " "
+        if x2 < x1:
+            newX = x1 - arrowSize
+            newY = y1 - arrowSize * slope
+            arrow += str(newX + arrowSize) + ',' + str(newY + arrowSize * tangent) + " "
+            arrow += str(newX - arrowSize) + ',' + str(newY - arrowSize * tangent)
+        else:
+            newX = x1 + arrowSize
+            newY = y1 + arrowSize * slope
+            arrow += str(newX + arrowSize) + ',' + str(newY + arrowSize * tangent) + " "
+            arrow += str(newX - arrowSize) + ',' + str(newY - arrowSize * tangent)
+        arrow += '"/>'
+        return arrow
 
 def line_JS(x1, y1, x2, y2, label):
         linestring  = "<g>" 
-        linestring += "<line x1='" + str(x1) + "%' y1='" + str(y1) + "%' x2='" + str(x2) + "%' y2='" + str(y2) + "%'/>"
+        linestring += "<line x1='" + str(x1) + "' y1='" + str(y1) + "' x2='" + str(x2) + "' y2='" + str(y2) + "'/>"
         linestring += "</g>"
 
         if (x2 < x1):
@@ -150,7 +178,7 @@ def line_JS(x1, y1, x2, y2, label):
                 y1, y2 = y2, y1
 
         linestring += "<text x='" + str(x1 + abs(x2 - x1) / 2.0) + \
-                         "%' y='" + str(y1 + abs(y2 - y1) / 2.0) + "%'  font-size='" + str(2) + "vw' class='linetext'>" + label + "</text>"
+                         "' y='" + str(y1 + abs(y2 - y1) / 2.0) + "'  font-size='" + str(2) + "' class='linetext'>" + label + "</text>"
         
         return linestring
 
@@ -169,7 +197,6 @@ def vertex_JS(node1, node2, weight, direction):
         deltaX = node1.x - node2.x
         deltaY = node1.y - node2.y
 
-        # directionRatio = float(deltaY) / float(deltaX)
         angle = abs(atan2(deltaY, deltaX))
 
         if deltaX < 0:
@@ -187,6 +214,8 @@ def vertex_JS(node1, node2, weight, direction):
                 y2 = node2.y + node2.r * trig45
 
         vertexjs = line_JS(x1, y1, x2, y2, weight)
+        if weight:
+            vertexjs += arrow_JS(x1, y1, x2, y2)
 
         return vertexjs
 
