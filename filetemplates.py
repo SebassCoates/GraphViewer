@@ -34,6 +34,7 @@ htmlopen = """<!doctype html>\
         <meta charset="utf-8"/>
         <link rel="stylesheet" href="index.css"/>
         <script src="index.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet"> 
 </head>
 <body onload=load()>
 """
@@ -64,7 +65,7 @@ svg {
         right:0;
         margin:0px;
         padding:0px;
-        background-color: rgb(125,125,125);
+        background-color: rgb(255,219,169);
 }"""
 
 nodecss = """.node {
@@ -82,11 +83,11 @@ nodecss = """.node {
 }"""
 
 circlecss = """circle {
-        stroke: white;
-        fill: black;   
+        stroke: black;
+        fill: rgb(163,217,119);   
         padding: 0px;
         margin: 0px;
-        stroke-width: .2;
+        stroke-width: .25;
 }"""
 
 linecss = """line {
@@ -98,7 +99,7 @@ linecss = """line {
 polygon {
         padding: 0px;
         margin: 0px;
-        stroke: red;
+        stroke: black;
         stroke-width: .3;
 }
 """
@@ -108,14 +109,18 @@ textcss = """text {
         text-anchor: middle;
         fill: white;
         font-size: .3;
+        font-weight: 400;
+        font-family: 'Anton', sans-serif;
+
 }
 
 .linetext {
-        fill: white;
+        fill: rgb(58, 166, 221);
+        font-size: 4;
 }
 
 .circletext {
-        fill: rgb(57, 255, 35);
+        fill: black;
 }"""
 ################################################################################
 
@@ -142,13 +147,13 @@ class Node:
 def circle_JS(x, y, r, label):
         circlestring  = "<g>"
         circlestring += "<circle cx='" + str(x) + "' cy='" + str(y) + "' r='" + str(r) + "' id='" + label + "'/>"
-        circlestring += "<text x='" + str(x) + "' y='" + str(y) + "' font-size='" + str(r / 18) + "vw' class='circletext'>" + label + "</text>"
+        circlestring += "<text x='" + str(x) + "' y='" + str(y + 1) + "' font-size='" + str(r / 18) + "vw' class='circletext'>" + label + "</text>"
         circlestring += "</g>"
         return circlestring
 
 #Coords of line
 def arrow_JS(x1, y1, x2, y2):
-        arrowSize = 1#((y2 - y1) ** 2 +  (x2 - x1) ** 2) ** .5
+        arrowSize = .70#((y2 - y1) ** 2 +  (x2 - x1) ** 2) ** .5
         slope = (y2 - y1) / (x2 - x1)
         tangent = -1 / slope
 
@@ -178,7 +183,7 @@ def line_JS(x1, y1, x2, y2, label):
                 y1, y2 = y2, y1
 
         linestring += "<text x='" + str(x1 + abs(x2 - x1) / 2.0) + \
-                         "' y='" + str(y1 + abs(y2 - y1) / 2.0) + "'  font-size='" + str(2) + "' class='linetext'>" + label + "</text>"
+                         "' y='" + str(y1 + abs(y2 - y1) / 2.0) + "'  font-size='" + str(4) + "' class='linetext'>" + label + "</text>"
         
         return linestring
 
