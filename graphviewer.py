@@ -74,11 +74,55 @@ def calculate_positions(adjMatrix, labels):
 
         return (positions, blockSize / 4)
 
-def generate_HTML(adjMatrix, labels):
+def divide_tree(adjMatrix, labels, root):
+        depth = 0
+        addedLayers = set()
+        inQueue = [False for i in range(len(labels))]
+        grid = []
+        queue = [(root, depth)]
+        
+        while len(queue) > 0:
+            node, depth = queue.pop(0)
+            inQueue[node] = True
+            if depth not in addedLayers:
+                grid.append([node])
+                addedLayers.add(depth)
+            else:
+                grid[depth].append(node)
+
+            for neighbor in range(len(labels)):
+                if adjMatrix.at(node, neighbor) > 0 and not inQueue[neighbor]:
+                    queue.append((neighbor, depth + 1))
+                    inQueue[neighbor] = True
+
+        return grid
+
+def calculate_tree_positions(adjMatrix, labels, root):
+        positions = {}
+        grid = divide_tree(adjMatrix, labels, root)
+        height = len(grid)
+        maxWidth = max([len(level) for level in grid])
+
+        nodeSize = min([100/height, 100/maxWidth])
+        topOffset = nodeSize / 2.714
+        
+        for i in range(len(grid)):
+            row = grid[i]
+            sideOffset = 100 / (1 + len(row))
+            for j in range(len(row)):
+                positions[labels[row[j]]] = Position(j * nodeSize + sideOffset, i * nodeSize + topOffset)
+
+        return positions, nodeSize / 4
+
+
+
+def generate_HTML(adjMatrix, labels, options):
         generated = htmlopen + svgopen
 
-        #sizes = calculate_sizes(adjMatrix, labels)
-        (positions, size) = calculate_positions(adjMatrix, labels)
+        if options[0] == "NO_ROOT":
+            (positions, size) = calculate_positions(adjMatrix, labels)
+        else: 
+            (positions, size) = calculate_tree_positions(adjMatrix, labels, options[0])
 
         for label in labels:
                 x = positions[label].x
@@ -92,9 +136,6 @@ def generate_HTML(adjMatrix, labels):
         #Only supporting undirected graphs
         for row in range(dimen):
                 for col in range(dimen):
-                        #if adjMatrix.at(col, row) != 0:
-                        #        if adjMatrix.at(col, row) != adjMatrix.at(row, col):
-                        #                print("Warning: only undirected graphs supported currently")
 
                         bidirectional = adjMatrix.at(col, row) == adjMatrix.at(row,col)
 
@@ -128,6 +169,8 @@ def generate_JS(adjMatrix, labels):
 
 
 ##################################### MAIN #####################################
+options = ["NO_ROOT"]
+
 if len(argv) < 3:
         invalid_args()
         quit()
@@ -144,8 +187,10 @@ except IOError:
         print('"' + argv[2] + '"' + " is invalid file (expecting label info)")
         quit()
 
-for arg in argv: #additional command line options handled here
-    pass
+for arg in argv[3:]: #additional command line options handled here
+    if "--root=" in arg:
+        options[0] = int(arg.replace("--root=", ""))
+
 
 #files for viewing graph in browser
 html = open("index.html", "w")
@@ -164,7 +209,7 @@ if len(labels) != adjMatrix.dimen:
         print("Error: number of labels does not match dimensions of adj matrix")
         quit()
 
-htmlString = generate_HTML(adjMatrix, labels)
+htmlString = generate_HTML(adjMatrix, labels, options)
 cssString  = generate_CSS(adjMatrix, labels)
 jsString   = generate_JS(adjMatrix, labels)
 

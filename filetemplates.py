@@ -148,7 +148,7 @@ def circle_JS(x, y, r, label):
 
 #Coords of line
 def arrow_JS(x1, y1, x2, y2):
-        arrowSize = 2#((y2 - y1) ** 2 +  (x2 - x1) ** 2) ** .5
+        arrowSize = 1#((y2 - y1) ** 2 +  (x2 - x1) ** 2) ** .5
         slope = (y2 - y1) / (x2 - x1)
         tangent = -1 / slope
 
@@ -214,7 +214,7 @@ def vertex_JS(node1, node2, weight, direction):
                 y2 = node2.y + node2.r * trig45
 
         vertexjs = line_JS(x1, y1, x2, y2, weight)
-        if weight:
+        if direction:
             vertexjs += arrow_JS(x1, y1, x2, y2)
 
         return vertexjs
