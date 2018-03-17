@@ -31,6 +31,10 @@ import numpy  as np
 from matrix import Matrix
 from filetemplates import *
 
+def display_help():
+        print("--colors=")
+        quit()
+
 def invalid_args():
         print("Invalid arguments given")
         print("Expecting 2 files")
@@ -157,9 +161,15 @@ def generate_HTML(adjMatrix, labels, options):
 
         return generated + svgclose +  htmlclose
 
-def generate_CSS(adjMatrix, lables):
+def generate_CSS(adjMatrix, labels, options):
         generated  = svgcss + "\n\n" + nodecss + "\n\n" + circlecss + "\n\n" + linecss 
         generated += "\n\n" + textcss
+
+        if options[1] != "NO_COLORS":
+                color_labels = open(options[1], 'r').read().split()
+                for i, color in enumerate(color_labels):
+                        print('adding ' + color + " to " + labels[i])
+                        generated += add_node_color(labels[i], color)
 
         return generated
 
@@ -169,7 +179,10 @@ def generate_JS(adjMatrix, labels):
 
 
 ##################################### MAIN #####################################
-options = ["NO_ROOT"]
+options = ["NO_ROOT", "NO_COLORS"]
+
+if argv[1] in {'help', '--help', 'h', '--h'}:
+        display_help()
 
 if len(argv) < 3:
         invalid_args()
@@ -190,6 +203,8 @@ except IOError:
 for arg in argv[3:]: #additional command line options handled here
     if "--root=" in arg:
         options[0] = int(arg.replace("--root=", ""))
+    if "--colors=" in arg:
+        options[1] = arg.replace("--colors=", "")
 
 
 #files for viewing graph in browser
@@ -210,7 +225,7 @@ if len(labels) != adjMatrix.dimen:
         quit()
 
 htmlString = generate_HTML(adjMatrix, labels, options)
-cssString  = generate_CSS(adjMatrix, labels)
+cssString  = generate_CSS(adjMatrix, labels, options)
 jsString   = generate_JS(adjMatrix, labels)
 
 html.write(htmlString)

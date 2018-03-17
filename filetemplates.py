@@ -146,10 +146,13 @@ class Node:
 
 def circle_JS(x, y, r, label):
         circlestring  = "<g>"
-        circlestring += "<circle cx='" + str(x) + "' cy='" + str(y) + "' r='" + str(r) + "' id='" + label + "'/>"
+        circlestring += "<circle id='" + label + "' " + "cx='" + str(x) + "' cy='" + str(y) + "' r='" + str(r) + "' id='" + label + "'/>"
         circlestring += "<text x='" + str(x) + "' y='" + str(y + 1) + "' font-size='" + str(r / 18) + "vw' class='circletext'>" + label + "</text>"
         circlestring += "</g>"
         return circlestring
+
+def add_node_color(nodeID, color):
+        return "#" + nodeID + "{\n" + "stroke: " + color + ";\n}\n"
 
 #Coords of line
 def arrow_JS(x1, y1, x2, y2):
