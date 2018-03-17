@@ -87,7 +87,7 @@ circlecss = """circle {
         fill: rgb(163,217,119);   
         padding: 0px;
         margin: 0px;
-        stroke-width: .25;
+        stroke-width: .5;
 }"""
 
 linecss = """line {
