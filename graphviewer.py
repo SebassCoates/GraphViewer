@@ -99,9 +99,14 @@ def divide_tree(adjMatrix, labels, root):
                     queue.append((neighbor, depth + 1))
                     inQueue[neighbor] = True
 
+        disconnected = [i for i, notAdded in enumerate(inQueue) if notAdded == False]
+        grid.append(disconnected)
+
         return grid
 
 def calculate_tree_positions(adjMatrix, labels, root):
+        print(labels)
+
         positions = {}
         grid = divide_tree(adjMatrix, labels, root)
         height = len(grid)
@@ -127,6 +132,8 @@ def generate_HTML(adjMatrix, labels, options):
             (positions, size) = calculate_positions(adjMatrix, labels)
         else: 
             (positions, size) = calculate_tree_positions(adjMatrix, labels, options[0])
+
+        print(positions)
 
         for label in labels:
                 x = positions[label].x
