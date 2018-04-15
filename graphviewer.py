@@ -54,10 +54,10 @@ def calculate_sizes(adjMatrix, labels):
                         weight = adjMatrix.at(row, col)
                         connections[row] += weight 
                         connections[col] += weight 
-                        total += weight
+                        total += weight 
 
         for i in range(len(labels)):
-                sizes[labels[i]] = 25 * connections[i] / total
+                sizes[labels[i]] = 15 * sqrt(connections[i] / total)
 
         return sizes
 
@@ -76,7 +76,7 @@ def calculate_positions(adjMatrix, labels):
                         c = 0
                         r += 1
 
-        return (positions, blockSize / 4)
+        return (positions, calculate_sizes(adjMatrix, labels))
 
 def divide_tree(adjMatrix, labels, root):
         depth = 0
@@ -188,9 +188,11 @@ def force_adjust(adjMatrix, positions, iteration, velocities):
 def generate_HTML(adjMatrix, labels, options):
         generated = htmlopen + svgopen
         NUM_FORCES = 100 
+    
+        sizes = {}
 
         if options[0] == "NO_ROOT":
-            (positions, size) = calculate_positions(adjMatrix, labels)
+            (positions, sizes) = calculate_positions(adjMatrix, labels)
             #start from middle
             i = 0.0
             offset = 10
@@ -207,11 +209,15 @@ def generate_HTML(adjMatrix, labels, options):
                     #print(positions[position].y)
         else: 
             (positions, size) = calculate_tree_positions(adjMatrix, labels, options[0])
+        
 
         for label in labels:
                 x = positions[label].x
                 y = positions[label].y
-                r = size
+                if sizes == {}:
+                    r = size
+                else:
+                    r = sizes[label]
                 nodes[label] = Node(x, y, r, label)
                 generated += node_JS(nodes[label]) 
 
