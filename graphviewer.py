@@ -25,7 +25,7 @@
 import webbrowser
 import os
 from sys import argv
-from math import ceil, sqrt
+from math import ceil, sqrt, tan, cos, sin, atan
 import random as rand
 import numpy  as np
 from matrix import Matrix
@@ -121,13 +121,90 @@ def calculate_tree_positions(adjMatrix, labels, root):
 
         return positions, nodeSize / 4
 
+def distance_between(position1, position2):
+    deltax = position1.x - position2.x
+    deltay = position1.y - position2.y
+    return (sqrt((deltax ** 2) + (deltay ** 2)))
+
+def angle_between(position1, position2):
+    deltax = position1.x - position2.x
+    deltay = position1.y - position2.y
+    if deltax == 0:
+        return 0
+    return atan(deltay / deltax)
+
+def force_adjust(adjMatrix, positions, iteration, velocities):
+    STEP_DISTANCE = 1 #/ (iteration + 1) 
+    deltaPositions = {}
+    degrees = []
+    for i in range(len(positions)):
+        degrees.append(0)
+        for j in range(len(positions)):
+            degrees[i] += adjMatrix.at(i, j)
+
+    for node in positions:
+        deltaPositions[node] = Position(0,0)
+
+    for node in positions: #nodes indexed by 1 in positions
+        position = positions[node]
+        deltaPosition = deltaPositions[node]
+        for neighbor in range(len(positions)):
+            is_neighbor = adjMatrix.at(int(node) - 1, neighbor) #Assumes node is int label indexed by one
+            neighborPosition = positions[str(neighbor + 1)] 
+            distance = distance_between(position, neighborPosition)
+            to_right = position.x - neighborPosition.x > 0
+            above    = position.y - neighborPosition.y > 0
+            angle    = abs(angle_between(position, neighborPosition))
+            scale    = degrees[int(node) - 1] + degrees[neighbor] + 1
+            if is_neighbor == 0 and distance != 0:
+                if to_right:
+                    deltaPosition.x += scale * STEP_DISTANCE * cos(angle) / distance ** 2
+                else:
+                    deltaPosition.x -= scale * STEP_DISTANCE * cos(angle) / distance ** 2
+                if above:
+                    deltaPosition.y += scale * STEP_DISTANCE * sin(angle) / distance** 2
+                else:
+                    deltaPosition.y -= scale * STEP_DISTANCE * sin(angle) / distance** 2
+            elif distance != 0:
+                    deltaPosition.x += scale * STEP_DISTANCE * cos(angle) / distance ** 2
+                    deltaPosition.y += scale * STEP_DISTANCE * sin(angle) / distance** 2
+
+    for node in positions:
+        vX, vY = velocities[int(node) -1 ] 
+        vX += deltaPositions[node].x
+        vY += deltaPositions[node].y
+        velocities[int(node) - 1] = (vX, vY)
+        newPositionX = positions[node].x + vX * STEP_DISTANCE
+        newPositionY = positions[node].y + vY * STEP_DISTANCE
+        size = 10
+        if newPositionX > 0 + size and newPositionX < 100 - size:
+            positions[node].x = newPositionX
+        if newPositionY > 0 + size and newPositionY < 100 - size:
+            positions[node].y = newPositionY
+
+    return positions, velocities
 
 
 def generate_HTML(adjMatrix, labels, options):
         generated = htmlopen + svgopen
+        NUM_FORCES = 100 
 
         if options[0] == "NO_ROOT":
             (positions, size) = calculate_positions(adjMatrix, labels)
+            #start from middle
+            i = 0.0
+            offset = 10
+            for pos in positions:
+                positions[pos] = Position(rand.randint(offset, 100 - offset), rand.randint(offset, 100 - offset))
+                i += offset/len(positions)
+
+            velocities = [(0,0) for l in labels] 
+            for i in range(NUM_FORCES):
+                positions, velocities = force_adjust(adjMatrix, positions, i, velocities)
+                for position in positions:
+                    pass
+                    #print(positions[position].x)
+                    #print(positions[position].y)
         else: 
             (positions, size) = calculate_tree_positions(adjMatrix, labels, options[0])
 
